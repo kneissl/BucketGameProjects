@@ -32,8 +32,8 @@ public class GameResources implements Disposable {
 //		arial_15 = new BitmapFont();
 //		berlin_42 = new BitmapFont(Gdx.files.internal("BerlinSansFBDemi-42.fnt"), false);
 //		berlin_80 = new BitmapFont(Gdx.files.internal("BerlinSansFBDemi-80.fnt"), false);
-		agency_160 = new BitmapFont(Gdx.files.internal("AgencyFB-160.fnt"), false);
-		beat = Gdx.audio.newMusic(Gdx.files.internal("beat.wav"));
+		agency_160 = new BitmapFont(Gdx.files.internal("data/AgencyFB-160.fnt"), false);
+		beat = Gdx.audio.newMusic(Gdx.files.internal("data/beat.wav"));
 	}
 	
 	protected final SpriteBatch spriteBatch;
