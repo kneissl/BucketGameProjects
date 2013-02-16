@@ -1,26 +1,24 @@
 package net.sourcedreams;
 
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.delay;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeIn;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeOut;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.parallel;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.run;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.scaleTo;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
+
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.BitmapFontCache;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
 public class SplashScreen extends AbstractScreen {
 		
-	private Stage stage;
 	private TextActor splashText;
 	
 	public SplashScreen(ScreenHandler pScreenHandler){
-		super(pScreenHandler);
-		
-		stage = new Stage(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true, GameResources.getInstance().spriteBatch);
+		super("SplashScreen", pScreenHandler, GameResources.getInstance().spriteBatch);
 		
 		splashText = new TextActor(GameResources.getInstance().agency_160);
 		splashText.setText("BUCKET", true);
@@ -36,7 +34,7 @@ public class SplashScreen extends AbstractScreen {
 							),							
 					delay(1f),
 					fadeOut(1f, Interpolation.pow2Out),
-					run(new CompletionMessage(pScreenHandler, this))
+					run(new RunnableCompletionMessage(this))
 			)
 		);
 
@@ -45,37 +43,27 @@ public class SplashScreen extends AbstractScreen {
 	}
 	
 	@Override
-	public void show(){
+	public void onShow(){
+		Gdx.gl.glClearColor(0f, 0f, 0f, 1);
 		GameResources.getInstance().beat.setLooping(true);
 		GameResources.getInstance().beat.play();
 	}
 	
 	@Override
 	public void render(float delta) {		
-		Gdx.gl.glClearColor(0f, 0f, 0f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
 		stage.act(delta);
 		stage.draw();		
+		
+		// Allows early bypass of SplashScreen
+		if (Gdx.input.justTouched()){
+			notifyScreenHandlerOfCompletion();
+		}
 	}
 	
 	@Override
-	public void dispose(){
-		stage.dispose();
+	protected void onCompletion() {
+		stage.clear();
 	}
-	
-	private static class CompletionMessage implements Runnable{
-		private ScreenHandler aHandler;
-		private SplashScreen aScreen;
-		public CompletionMessage(ScreenHandler handler, SplashScreen screen){
-			aHandler = handler;
-			aScreen = screen;
-		}
-		@Override
-		public void run() {
-			aHandler.onScreenCompletion(aScreen);
-		}
-		
-	}
-
 }

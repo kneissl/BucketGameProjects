@@ -32,6 +32,7 @@ public class BucketGame extends Game implements ScreenHandler {
 	@Override
 	public void create() {		
 		Gdx.app.log(logTag, "create()");
+		fpsLogger = new FPSLogger();
 		
 		GameResources.Initialize();
 		
@@ -40,33 +41,16 @@ public class BucketGame extends Game implements ScreenHandler {
 		
 		this.setScreen(splashScreen);
 		
-//		loadAssets();
-		
-//		bucket = new DynamicSprite(bucketImage);
-//		bucket.setPosition(viewportWidth/2f, 50f);
-//		
-//		rainMusic.setLooping(true);
-//		rainMusic.play();
-		
-		fpsLogger = new FPSLogger();
-	}
-
-	private void loadAssets() {
-		dropImage = new Texture(Gdx.files.internal("droplet.png"));
-		bucketImage = new Texture(Gdx.files.internal("bucket.png"));
-		
-		dropSound = Gdx.audio.newSound(Gdx.files.internal("drop.wav"));
-		rainMusic = Gdx.audio.newMusic(Gdx.files.internal("rain.mp3"));
 	}
 	
 	@Override
 	public void onScreenCompletion(Screen scr) {
-		Gdx.app.log(logTag, "Screen " + scr + " completed.");
+		Gdx.app.log(logTag, scr.toString() + " completed.");
 
 		if (scr == splashScreen){
 			
 			setScreen(menuScreen);
-			
+
 		} else if (scr == menuScreen){
 			
 			this.setScreen(null);
@@ -79,23 +63,14 @@ public class BucketGame extends Game implements ScreenHandler {
 	public void dispose() {
 		super.dispose();
 		Gdx.app.log(logTag, "dispose()");
-		
+		splashScreen.dispose();
+		menuScreen.dispose();
 		GameResources.Dispose();
 	}
 
 	@Override
 	public void render() {		
 		super.render();
-//		Gdx.gl.glClearColor(.56f, .71f, .8f, 1);
-//		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-//		
-//		camera.update();
-//		
-//		batch.setProjectionMatrix(camera.combined);
-//		batch.begin();
-//		bucket.drawCentered(batch);
-//		batch.end();
-		
 		fpsLogger.log();
 	}
 

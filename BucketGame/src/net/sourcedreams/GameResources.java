@@ -10,6 +10,10 @@ public class GameResources implements Disposable {
 	
 	private static GameResources instance;
 	
+	/**
+	 * Forces initialization of GameResources, otherwise they will be lazily 
+	 * instantiated (all at once) upon first call to GameResources.getInstance().
+	 */
 	public static void Initialize(){
 		if (instance == null){
 			instance = new GameResources();
