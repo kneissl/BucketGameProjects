@@ -44,8 +44,12 @@ public class BucketGame extends Game implements ScreenHandler {
 	}
 	
 	@Override
-	public void onScreenCompletion(Screen scr) {
-		Gdx.app.log(logTag, scr.toString() + " completed.");
+	public void processScreenMessage(Screen scr, String msg) {
+		if (msg!=null){
+			Gdx.app.log(logTag, "Received Message \"" + msg + "\" from " + scr.toString());
+		} else {
+			Gdx.app.log(logTag, "Received Null Message from " + scr.toString());
+		}
 
 		if (scr == splashScreen){
 			
@@ -53,12 +57,15 @@ public class BucketGame extends Game implements ScreenHandler {
 
 		} else if (scr == menuScreen){
 			
-			this.setScreen(null);
-			Gdx.app.exit();
-			
+			if (msg.equals("EXIT")){
+				Gdx.app.exit();
+			} else {
+				Gdx.app.log(logTag, "Unknown Message from " + scr + ": " + msg);		
+			}
 		}
 	}
 
+	
 	@Override
 	public void dispose() {
 		super.dispose();

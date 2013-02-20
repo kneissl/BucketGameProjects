@@ -46,8 +46,6 @@ public abstract class AbstractScreen implements Screen {
 
 	@Override
 	public void resume() {}
-
-	protected void onCompletion() {}
 	
 	@Override
 	public final void resize(int width, int height) {
@@ -83,20 +81,21 @@ public abstract class AbstractScreen implements Screen {
 		return screenName;
 	}
 	
-	protected final void notifyScreenHandlerOfCompletion(){
-		this.onCompletion();
-		screenHandler.onScreenCompletion(this);
+	protected final void sendMessageToHandler(String msg){
+		screenHandler.processScreenMessage(this, msg);
 	}
 	
-	protected static class RunnableCompletionMessage implements Runnable{
+	protected static class RunnableSendMessage implements Runnable{
 		private AbstractScreen aScreen;
-		public RunnableCompletionMessage(AbstractScreen screen){
+		private String aMsg;
+		public RunnableSendMessage(AbstractScreen screen, String msg){
 			aScreen = screen;
+			aMsg = msg;
 		}
 		
 		@Override
 		public void run() {
-			aScreen.notifyScreenHandlerOfCompletion();
+			aScreen.sendMessageToHandler(aMsg);
 		}	
 	}
 }

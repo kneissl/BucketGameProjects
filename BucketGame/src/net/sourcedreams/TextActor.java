@@ -5,12 +5,17 @@ import com.badlogic.gdx.graphics.g2d.BitmapFontCache;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public class TextActor extends Group {
 
 	private BitmapFontCache cache;
 	private TextChild textChild;
 
+	public TextActor(String fontName, Skin skin){
+		this(skin.getFont(fontName));
+	}
+	
 	public TextActor(BitmapFont pFont){
 		this.cache = new BitmapFontCache(pFont);
 		textChild = new TextChild(this);

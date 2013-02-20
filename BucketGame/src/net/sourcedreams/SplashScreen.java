@@ -11,7 +11,6 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 
 public class SplashScreen extends AbstractScreen {
 		
@@ -20,7 +19,8 @@ public class SplashScreen extends AbstractScreen {
 	public SplashScreen(ScreenHandler pScreenHandler){
 		super("SplashScreen", pScreenHandler, GameResources.getInstance().spriteBatch);
 		
-		splashText = new TextActor(GameResources.getInstance().agency_160);
+		//splashText = new TextActor(GameResources.getSkin().getFont("splash-font"));
+		splashText = new TextActor("splash-font", GameResources.getSkin());
 		splashText.setText("BUCKET", true);
 		splashText.setPosition(Gdx.graphics.getWidth()/2f, Gdx.graphics.getHeight()/2f);
 		splashText.setScale(.75f);
@@ -34,7 +34,7 @@ public class SplashScreen extends AbstractScreen {
 							),							
 					delay(1f),
 					fadeOut(1f, Interpolation.pow2Out),
-					run(new RunnableCompletionMessage(this))
+					run(new RunnableSendMessage(this, null))
 			)
 		);
 
@@ -58,12 +58,7 @@ public class SplashScreen extends AbstractScreen {
 		
 		// Allows early bypass of SplashScreen
 		if (Gdx.input.justTouched()){
-			notifyScreenHandlerOfCompletion();
+			sendMessageToHandler(null);
 		}
-	}
-	
-	@Override
-	protected void onCompletion() {
-		stage.clear();
 	}
 }

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Disposable;
 
 public class GameResources implements Disposable {
@@ -33,29 +34,35 @@ public class GameResources implements Disposable {
 	
 	private GameResources(){
 		spriteBatch = new SpriteBatch();
-//		arial_15 = new BitmapFont();
-//		berlin_42 = new BitmapFont(Gdx.files.internal("BerlinSansFBDemi-42.fnt"), false);
-//		berlin_80 = new BitmapFont(Gdx.files.internal("BerlinSansFBDemi-80.fnt"), false);
-		agency_160 = new BitmapFont(Gdx.files.internal("data/AgencyFB-160.fnt"), false);
-		beat = Gdx.audio.newMusic(Gdx.files.internal("data/beat.ogg"));
+		skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
+		
+		splashFont = skin.getFont("splash-font");
+		defaultFont = skin.getFont("default-font");
+		
+		beat = Gdx.audio.newMusic(Gdx.files.internal("audio/beat.ogg"));
 	}
 	
 	protected final SpriteBatch spriteBatch;
-//	protected final BitmapFont arial_15;
-//	protected final BitmapFont berlin_42;
-//	protected final BitmapFont berlin_80;
-	protected final BitmapFont agency_160;
+	private final Skin skin;
+	protected final BitmapFont defaultFont;
+	protected final BitmapFont splashFont;
 	protected final Music beat;
  
 	@Override
 	public void dispose() {
 		spriteBatch.dispose();
-//		arial_15.dispose();
-//		berlin_42.dispose();
-//		berlin_80.dispose();
-		agency_160.dispose();
+		skin.dispose();
+
+//		assumedly taken care of by skin.dispose()
+//		defaultFont.dispose();
+//		splashFont.dispose();
+
 		beat.dispose();
 		Gdx.app.log("GameResources", "Disposed!");
+	}
+
+	static Skin getSkin() {
+		return getInstance().skin;
 	}
 	 
 }
