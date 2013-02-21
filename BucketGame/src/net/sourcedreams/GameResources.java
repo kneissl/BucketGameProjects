@@ -58,6 +58,9 @@ public class GameResources implements Disposable {
 //		splashFont.dispose();
 
 		beat.dispose();
+		
+		instance = null;
+		
 		Gdx.app.log("GameResources", "Disposed!");
 	}
 

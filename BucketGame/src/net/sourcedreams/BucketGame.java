@@ -108,6 +108,7 @@ public class BucketGame extends Game implements ScreenHandler {
 
 	@Override
 	public void resume() {
+		GameResources.Initialize();
 		super.resume();
 		Gdx.app.log(logTag, "resume()");
 	}
