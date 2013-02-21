@@ -21,7 +21,7 @@ public class MenuScreen extends AbstractScreen {
 		
 		table = new Table();
 		table.setFillParent(true);
-		table.debug();
+//		table.debug();
 		stage.addActor(table);
 		
 		buttonTest1 = new TextButton("Test 1", GameResources.getSkin());
@@ -33,6 +33,14 @@ public class MenuScreen extends AbstractScreen {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				sendMessageToHandler("EXIT");
+			}
+		});
+		
+		buttonTest1.addListener(new ChangeListener() {
+			
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				sendMessageToHandler("TEST1");
 			}
 		});
 		
@@ -55,7 +63,7 @@ public class MenuScreen extends AbstractScreen {
 		stage.act(delta);
 		stage.draw();
 		
-		Table.drawDebug(stage);
+//		Table.drawDebug(stage);
 		
 	}
 	
