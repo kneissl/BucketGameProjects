@@ -9,55 +9,52 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 
-public class MenuScreen extends AbstractScreen {
+public class OptionsScreen extends AbstractScreen {
 	
 	Table table;
-	TextButton buttonPlay;
-	TextButton buttonOptions;
-	TextButton buttonExit;
+	TextButton buttonMusic;
+	TextButton buttonMenu;
 	
-	public MenuScreen(ScreenHandler pScreenHandler) {
-		super("MenuScreen", pScreenHandler, GameResources.getInstance().spriteBatch);
+	private boolean music = true;
+	
+	public OptionsScreen(ScreenHandler pScreenHandler) {
+		super("OptionsScreen", pScreenHandler, GameResources.getInstance().spriteBatch);
 		
 		table = new Table();
 		table.setFillParent(true);
 //		table.debug();
 		stage.addActor(table);
 		
-		buttonPlay = new TextButton("Play", GameResources.getSkin());
-		buttonOptions = new TextButton("Options", GameResources.getSkin());
+		buttonMusic = new TextButton("Music: ON", GameResources.getSkin());
 		
-		buttonExit = new TextButton("Exit", GameResources.getSkin());
-		buttonExit.addListener(new ChangeListener() {
+		buttonMenu = new TextButton("Back", GameResources.getSkin());
+		buttonMenu.addListener(new ChangeListener() {
 			
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				sendMessageToHandler("EXIT");
+				sendMessageToHandler("MENU");
 			}
 		});
 		
-		buttonPlay.addListener(new ChangeListener() {
+		buttonMusic.addListener(new ChangeListener() {
 			
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				sendMessageToHandler("PLAY");
+				music = !music;
+				if (music){
+					GameResources.getInstance().beat.play();
+					buttonMusic.setText("Music: ON");
+				} else {
+					GameResources.getInstance().beat.stop();
+					buttonMusic.setText("Music: OFF");
+				}
 			}
 		});
 		
-		buttonOptions.addListener(new ChangeListener() {
-			
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				sendMessageToHandler("OPTIONS");
-			}
-		});
-
 		table.defaults().width(200f).spaceBottom(20f);
-		table.add(buttonPlay);
+		table.add(buttonMusic);
 		table.row();
-		table.add(buttonOptions);
-		table.row();
-		table.add(buttonExit);
+		table.add(buttonMenu);
 	}
 	
 	@Override

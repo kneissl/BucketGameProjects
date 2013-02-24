@@ -12,14 +12,14 @@ public class GameScreen extends AbstractScreen {
 
 	Table table;
 	TextButton buttonBack;
-	
+	GridActor grid;
 	
 	public GameScreen(ScreenHandler pScreenHandler) {
 		super("GameScreen", pScreenHandler, GameResources.getInstance().spriteBatch);
 		
 		table = new Table();
 		table.setFillParent(true);
-//		table.debug();
+		table.debug();
 		stage.addActor(table);
 		
 		buttonBack = new TextButton("Back", GameResources.getSkin());
@@ -33,7 +33,18 @@ public class GameScreen extends AbstractScreen {
 		
 		table.top();
 		table.add(buttonBack).expandX().left().padTop(5f).padLeft(5f);
-			
+		
+		int gridSize = Math.min((int)stage.getWidth(), (int)stage.getHeight());
+		gridSize = (int)(((float)gridSize * 0.8f) + .5f);
+		
+		grid = new GridActor();
+		grid.setSize(gridSize, gridSize);
+		
+		grid.setPosition((stage.getWidth()-gridSize)/2f, (stage.getHeight()-gridSize)/2f);
+		grid.addListener(grid.getGridInputListener());
+		
+		stage.addActor(grid);
+		
 	}
 	
 	@Override
@@ -47,7 +58,7 @@ public class GameScreen extends AbstractScreen {
 		stage.act(delta);
 		stage.draw();
 		
-//		Table.drawDebug(stage);
+		Table.drawDebug(stage);
 		
 	}
 }

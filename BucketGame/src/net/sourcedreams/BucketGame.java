@@ -28,6 +28,7 @@ public class BucketGame extends Game implements ScreenHandler {
 	
 	private SplashScreen splashScreen;
 	private MenuScreen menuScreen;
+	private OptionsScreen optionsScreen;
 	private GameScreen gameScreen;
 	
 	@Override
@@ -39,6 +40,7 @@ public class BucketGame extends Game implements ScreenHandler {
 		
 		splashScreen = new SplashScreen(this);
 		menuScreen = new MenuScreen(this);
+		optionsScreen = new OptionsScreen(this);
 		gameScreen = new GameScreen(this);
 		
 		this.setScreen(splashScreen);
@@ -61,16 +63,28 @@ public class BucketGame extends Game implements ScreenHandler {
 			
 			if (msg.equals("EXIT")){
 				Gdx.app.exit();
-			} else if (msg.equals("TEST1")){
+			} else if (msg.equals("PLAY")){
 				setScreen(gameScreen);
+			} else if (msg.equals("OPTIONS")){
+				setScreen(optionsScreen);
 			} else {
-				Gdx.app.log(logTag, "Unknown Message from " + scr + ": " + msg);		
+				unknownMessage(scr, msg);		
+			}
+		
+		} else if (scr == optionsScreen){ 
+			
+			if (msg.equals("MENU")){
+				setScreen(menuScreen);
+			} else {
+				unknownMessage(scr, msg);
 			}
 		
 		} else if (scr == gameScreen){
 			
 			if (msg.equals("MENU")){
 				setScreen(menuScreen);
+			} else {
+				unknownMessage(scr, msg);
 			}
 			
 		} else {
@@ -79,6 +93,10 @@ public class BucketGame extends Game implements ScreenHandler {
 	}
 
 	
+	private void unknownMessage(Screen scr, String msg) {
+		Gdx.app.log(logTag, "Unknown Message from " + scr + ": " + msg);
+	}
+
 	@Override
 	public void dispose() {
 		super.dispose();
