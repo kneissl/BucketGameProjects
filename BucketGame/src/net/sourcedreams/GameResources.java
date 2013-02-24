@@ -1,6 +1,7 @@
 package net.sourcedreams;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -40,6 +41,7 @@ public class GameResources implements Disposable {
 		defaultFont = skin.getFont("default-font");
 		
 		beat = Gdx.audio.newMusic(Gdx.files.internal("audio/beat.ogg"));
+		
 	}
 	
 	protected final SpriteBatch spriteBatch;

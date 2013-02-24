@@ -43,8 +43,10 @@ public class BucketGame extends Game implements ScreenHandler {
 		optionsScreen = new OptionsScreen(this);
 		gameScreen = new GameScreen(this);
 		
-		this.setScreen(splashScreen);
+		GameResources.getInstance().beat.setLooping(true);
+		GameResources.getInstance().beat.play();
 		
+		this.setScreen(splashScreen);
 	}
 	
 	@Override

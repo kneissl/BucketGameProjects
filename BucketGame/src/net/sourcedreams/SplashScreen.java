@@ -45,8 +45,6 @@ public class SplashScreen extends AbstractScreen {
 	@Override
 	public void onShow(){
 		Gdx.gl.glClearColor(0f, 0f, 0f, 1);
-		GameResources.getInstance().beat.setLooping(true);
-		GameResources.getInstance().beat.play();
 	}
 	
 	@Override
