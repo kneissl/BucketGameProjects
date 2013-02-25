@@ -1,7 +1,6 @@
 {
 		
 		com.badlogic.gdx.graphics.g2d.BitmapFont: { 
-				splash-font: { file: AgencyFB-160.fnt },
 				default-font: { file: AgencyFB-32.fnt }
 		},
 		com.badlogic.gdx.graphics.Color: {

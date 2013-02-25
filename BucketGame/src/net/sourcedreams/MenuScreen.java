@@ -17,7 +17,7 @@ public class MenuScreen extends AbstractScreen {
 	TextButton buttonExit;
 	
 	public MenuScreen(ScreenHandler pScreenHandler) {
-		super("MenuScreen", pScreenHandler, GameResources.getInstance().spriteBatch);
+		super("MenuScreen", pScreenHandler, GameResources.getSpriteBatch());
 		
 		table = new Table();
 		table.setFillParent(true);

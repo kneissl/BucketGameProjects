@@ -39,18 +39,12 @@ public class BucketGame extends Game implements ScreenHandler {
 		GameResources.Initialize();
 		
 		splashScreen = new SplashScreen(this);
-		menuScreen = new MenuScreen(this);
-		optionsScreen = new OptionsScreen(this);
-		gameScreen = new GameScreen(this);
-		
-		GameResources.getInstance().beat.setLooping(true);
-		GameResources.getInstance().beat.play();
 		
 		this.setScreen(splashScreen);
 	}
 	
 	@Override
-	public void processScreenMessage(Screen scr, String msg) {
+	public void receiveMessageFromScreen(final Screen scr, String msg) {
 		if (msg!=null){
 			Gdx.app.log(logTag, "Received Message \"" + msg + "\" from " + scr.toString());
 		} else {
@@ -59,7 +53,16 @@ public class BucketGame extends Game implements ScreenHandler {
 
 		if (scr == splashScreen){
 			
-			setScreen(menuScreen);
+			if (msg.equals("ASSETSLOADED")){
+				loadScreens();
+				((SplashScreen)scr).onReadyToShowMenu();
+				Gdx.app.log(logTag, "All Screens Loaded");
+				
+			} else if (msg.equals("MENU")){
+				setScreen(menuScreen);
+			} else {
+				unknownMessage(scr, msg);
+			}
 
 		} else if (scr == menuScreen){
 			
@@ -95,6 +98,12 @@ public class BucketGame extends Game implements ScreenHandler {
 	}
 
 	
+	private void loadScreens() {
+		menuScreen = new MenuScreen(this);
+		optionsScreen = new OptionsScreen(this);
+		gameScreen = new GameScreen(this);
+	}
+
 	private void unknownMessage(Screen scr, String msg) {
 		Gdx.app.log(logTag, "Unknown Message from " + scr + ": " + msg);
 	}

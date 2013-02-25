@@ -4,5 +4,5 @@ import com.badlogic.gdx.Screen;
 
 public interface ScreenHandler {
 
-	public void processScreenMessage(Screen scr, String message);
+	public void receiveMessageFromScreen(Screen scr, String message);
 }

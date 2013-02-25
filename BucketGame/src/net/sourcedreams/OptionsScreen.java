@@ -3,6 +3,7 @@ package net.sourcedreams;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
@@ -14,11 +15,12 @@ public class OptionsScreen extends AbstractScreen {
 	Table table;
 	TextButton buttonMusic;
 	TextButton buttonMenu;
+	Slider sliderMusicVolume;
 	
 	private boolean music = true;
 	
 	public OptionsScreen(ScreenHandler pScreenHandler) {
-		super("OptionsScreen", pScreenHandler, GameResources.getInstance().spriteBatch);
+		super("OptionsScreen", pScreenHandler, GameResources.getSpriteBatch());
 		
 		table = new Table();
 		table.setFillParent(true);
@@ -26,7 +28,33 @@ public class OptionsScreen extends AbstractScreen {
 		stage.addActor(table);
 		
 		buttonMusic = new TextButton("Music: ON", GameResources.getSkin());
+		buttonMusic.addListener(new ChangeListener() {
+			
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				music = !music;
+				if (music){
+					GameResources.getMusic().play();
+					buttonMusic.setText("Music: ON");
+				} else {
+					GameResources.getMusic().stop();
+					buttonMusic.setText("Music: OFF");
+				}
+			}
+		});
 		
+		sliderMusicVolume = new Slider(0, 1, .01f, false, GameResources.getSkin());
+		sliderMusicVolume.setValue(1f);
+		
+		sliderMusicVolume.addListener(new ChangeListener(){
+		
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				GameResources.getMusic().setVolume(((Slider)actor).getValue());
+			}
+			
+		});
+				
 		buttonMenu = new TextButton("Back", GameResources.getSkin());
 		buttonMenu.addListener(new ChangeListener() {
 			
@@ -36,25 +64,12 @@ public class OptionsScreen extends AbstractScreen {
 			}
 		});
 		
-		buttonMusic.addListener(new ChangeListener() {
-			
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				music = !music;
-				if (music){
-					GameResources.getInstance().beat.play();
-					buttonMusic.setText("Music: ON");
-				} else {
-					GameResources.getInstance().beat.stop();
-					buttonMusic.setText("Music: OFF");
-				}
-			}
-		});
 		
-		table.defaults().width(200f).spaceBottom(20f);
+		table.defaults().width(200f).spaceBottom(20f).spaceRight(20f);
 		table.add(buttonMusic);
+		table.add(sliderMusicVolume);
 		table.row();
-		table.add(buttonMenu);
+		table.add(buttonMenu).colspan(2).spaceTop(40f);
 	}
 	
 	@Override

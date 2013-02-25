@@ -15,7 +15,7 @@ public class GameScreen extends AbstractScreen {
 	GridActor grid;
 	
 	public GameScreen(ScreenHandler pScreenHandler) {
-		super("GameScreen", pScreenHandler, GameResources.getInstance().spriteBatch);
+		super("GameScreen", pScreenHandler, GameResources.getSpriteBatch());
 		
 		table = new Table();
 		table.setFillParent(true);

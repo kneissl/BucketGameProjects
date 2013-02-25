@@ -11,10 +11,6 @@ public class TextActor extends Group {
 
 	private BitmapFontCache cache;
 	private TextChild textChild;
-
-	public TextActor(String fontName, Skin skin){
-		this(skin.getFont(fontName));
-	}
 	
 	public TextActor(BitmapFont pFont){
 		this.cache = new BitmapFontCache(pFont);
@@ -27,6 +23,8 @@ public class TextActor extends Group {
 		if (center){
 			cache.setPosition(-cache.getBounds().width/2f, cache.getBounds().height/2f);
 		}
+		this.setWidth(cache.getBounds().width);
+		this.setHeight(cache.getBounds().height);
 	}
 	
 //	@Override

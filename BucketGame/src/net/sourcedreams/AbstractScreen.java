@@ -82,7 +82,7 @@ public abstract class AbstractScreen implements Screen {
 	}
 	
 	protected final void sendMessageToHandler(String msg){
-		screenHandler.processScreenMessage(this, msg);
+		screenHandler.receiveMessageFromScreen(this, msg);
 	}
 	
 	protected static class RunnableSendMessage implements Runnable{

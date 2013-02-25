@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Disposable;
+import com.sun.xml.internal.ws.api.streaming.XMLStreamReaderFactory.Default;
 
 public class GameResources implements Disposable {
 	
@@ -34,40 +35,82 @@ public class GameResources implements Disposable {
 	}
 	
 	private GameResources(){
+		assetManager = new AssetManager();
 		spriteBatch = new SpriteBatch();
-		skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
+		splashFont = new BitmapFont(Gdx.files.internal("ui/AgencyFB-160.fnt"), false);
+		defaultFont = new BitmapFont(Gdx.files.internal("ui/AgencyFB-32.fnt"), false);
 		
-		splashFont = skin.getFont("splash-font");
-		defaultFont = skin.getFont("default-font");
-		
-		beat = Gdx.audio.newMusic(Gdx.files.internal("audio/beat.ogg"));
+		assetManager.load("audio/beat.ogg", Music.class);
+		assetManager.load("ui/uiskin.json", Skin.class);
+
+//		skin = new Skin(Gdx.files.internal("ui/uiskin.json"));		
+//		beat = Gdx.audio.newMusic(Gdx.files.internal("audio/beat.ogg"));
 		
 	}
 	
-	protected final SpriteBatch spriteBatch;
-	private final Skin skin;
-	protected final BitmapFont defaultFont;
-	protected final BitmapFont splashFont;
-	protected final Music beat;
+	private final AssetManager assetManager;
+	private final SpriteBatch spriteBatch;
+	private Skin skin;
+	private BitmapFont defaultFont;
+	private BitmapFont splashFont;
+	private Music beat;
+	
+	public static AssetManager getAssetManager(){
+		Initialize();
+		return instance.assetManager; 
+	}
+	
+	public static SpriteBatch getSpriteBatch(){
+		Initialize();
+		return instance.spriteBatch;
+	}
+	
+	public static Music getMusic(){
+		Initialize();
+		if (instance.beat == null){
+			if (instance.assetManager.isLoaded("audio/beat.ogg")){
+				instance.beat = instance.assetManager.get("audio/beat.ogg");
+			} else return null;
+		} 
+		return instance.beat;
+	}	
+	
+	public static Skin getSkin(){
+		Initialize();
+		if (instance.skin == null){
+			if (instance.assetManager.isLoaded("ui/uiskin.json")){
+				instance.skin = instance.assetManager.get("ui/uiskin.json");
+			} else return null;
+		}
+		return instance.skin;
+	}
+	
+	public static BitmapFont getDefaultFont(){
+		Initialize();
+		return instance.defaultFont;
+	}
+	
+	public static BitmapFont getSplashFont(){
+		Initialize();
+		return instance.splashFont;
+	}
  
 	@Override
 	public void dispose() {
+		assetManager.dispose();
+
+//		assumedly taken care of by assetManager.dispose()
+//		skin.dispose();
+//		beat.dispose();
+		
+		defaultFont.dispose();
+		splashFont.dispose();
+		
 		spriteBatch.dispose();
-		skin.dispose();
-
-//		assumedly taken care of by skin.dispose()
-//		defaultFont.dispose();
-//		splashFont.dispose();
-
-		beat.dispose();
 		
 		instance = null;
 		
 		Gdx.app.log("GameResources", "Disposed!");
 	}
 
-	static Skin getSkin() {
-		return getInstance().skin;
-	}
-	 
 }
