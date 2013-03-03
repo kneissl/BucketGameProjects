@@ -2,31 +2,30 @@ package net.sourcedreams;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 
 public abstract class ComponentActor extends Actor {
 		
 	protected final Gamefield gamefield;
-	protected final TextureRegion region;
+	protected final Texture regionOff;
+	protected final Texture regionOn;
+	
+	private boolean isOn = false;
 	private boolean isSelected = false;
 	private String name;
 	private Vector2 pinScale;
 	
-	public ComponentActor(String name, TextureRegion region, float width, float height, Gamefield gamefield){
+//	public ComponentActor(String name, TextureRegion regionOff, TextureRegion regionOn, float width, float height, Gamefield gamefield){
+	public ComponentActor(String name, Texture regionOff, Texture regionOn, float width, float height, Gamefield gamefield){
 		this.name = name;
-		this.region = region;
+		this.regionOff = regionOff;
+		this.regionOn = regionOn;
 		this.gamefield = gamefield;
-		float scaleX = width/region.getRegionWidth();
-		float scaleY = height/region.getRegionHeight();
+		float scaleX = width/regionOff.getWidth();
+		float scaleY = height/regionOff.getHeight();
 		Gdx.app.log("ComponentActor", scaleX + ", " + scaleY);
 //		this.setScale(scaleX, scaleY);
 		pinScale = new Vector2(scaleX, scaleY);
@@ -38,8 +37,15 @@ public abstract class ComponentActor extends Actor {
 	public void draw(SpriteBatch batch, float parentAlpha) {
         Color color = getColor();
         batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
-        batch.draw(region, getX(), getY(), getOriginX(), getOriginY(),
-                getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
+        if (isOn){
+        	batch.draw(regionOn, getX(), getY(), getWidth(), getHeight());
+//	        batch.draw(regionOn, getX(), getY(), getOriginX(), getOriginY(),
+//	                getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
+        } else {
+        	batch.draw(regionOff, getX(), getY(), getWidth(), getHeight());
+//        	batch.draw(regionOff, getX(), getY(), getOriginX(), getOriginY(),
+//	                getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
+        }
         
         if (isSelected){
         	batch.setColor(Color.WHITE);
@@ -52,7 +58,7 @@ public abstract class ComponentActor extends Actor {
 	}
 	
 	public void deselect() {
-		isSelected = false;	
+		isSelected = false;
 	}
 
 	public abstract void showWireDialog();

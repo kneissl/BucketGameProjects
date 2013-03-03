@@ -3,28 +3,12 @@ package net.sourcedreams;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.FPSLogger;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class BucketGame extends Game implements ScreenHandler {
 	public static final String logTag = "BucketGame";
 	
 	private FPSLogger fpsLogger;
-	
-	private OrthographicCamera camera;
-	private SpriteBatch batch;
-	
-	private Texture dropImage;
-	private Texture bucketImage;
-	private Sound dropSound;
-	private Music rainMusic;
-	
-	private SpriteActor bucket;
 	
 	private SplashScreen splashScreen;
 	private MenuScreen menuScreen;

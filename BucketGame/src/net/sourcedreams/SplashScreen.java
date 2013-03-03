@@ -1,19 +1,9 @@
 package net.sourcedreams;
 
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.delay;
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeIn;
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeOut;
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.parallel;
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.run;
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.scaleTo;
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.visible;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.math.Interpolation;
 
 public class SplashScreen extends AbstractScreen {
 		
@@ -22,8 +12,8 @@ public class SplashScreen extends AbstractScreen {
 	
 	private boolean musicStarted = false;
 	private boolean loadingComplete = false;
-	private boolean readyToShowMenu = false;
-	private boolean splashComplete = false;
+//	private boolean readyToShowMenu = false;
+//	private boolean splashComplete = false;
 	
 	public SplashScreen(ScreenHandler pScreenHandler){
 		super("SplashScreen", pScreenHandler, GameResources.getSpriteBatch());
