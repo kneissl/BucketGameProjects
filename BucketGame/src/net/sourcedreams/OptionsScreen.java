@@ -45,7 +45,7 @@ public class OptionsScreen extends AbstractScreen {
 		
 		sliderMusicVolume = new Slider(0, 1, .01f, false, GameResources.getSkin());
 		sliderMusicVolume.setValue(1f);
-		
+
 		sliderMusicVolume.addListener(new ChangeListener(){
 		
 			@Override
@@ -67,7 +67,7 @@ public class OptionsScreen extends AbstractScreen {
 		
 		table.defaults().width(200f).spaceBottom(20f).spaceRight(20f);
 		table.add(buttonMusic);
-		table.add(sliderMusicVolume);
+		table.add(sliderMusicVolume).fillY();
 		table.row();
 		table.add(buttonMenu).colspan(2).spaceTop(40f);
 	}

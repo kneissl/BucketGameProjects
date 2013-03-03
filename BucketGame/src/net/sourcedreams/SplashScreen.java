@@ -7,9 +7,11 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.parallel;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.run;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.scaleTo;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.visible;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.Interpolation;
 
@@ -29,26 +31,27 @@ public class SplashScreen extends AbstractScreen {
 		splashText = new TextActor(GameResources.getSplashFont());
 		splashText.setText("BUCKET", true);
 		splashText.setPosition(Gdx.graphics.getWidth()/2f, Gdx.graphics.getHeight()/2f);
-		splashText.setScale(.75f);
-		splashText.setColor(1f, 1f, 1f, .5f);
-		
-		splashText.addAction( 
-			sequence(
-					parallel(
-							scaleTo(1f, 1f, 2f, Interpolation.pow2Out),
-							fadeIn(1f, Interpolation.pow2Out)
-							),							
-					delay(1f),
-					fadeOut(1f, Interpolation.pow2Out),
-					run(new Runnable() {
-						
-						@Override
-						public void run() {
-							splashComplete = true;
-						}
-					})
-			)
-		);
+		splashText.setColor(Color.WHITE);
+//		splashText.setScale(.65f);
+//		splashText.setColor(1f, 1f, 1f, .25f);
+//		
+//		splashText.addAction( 
+//			sequence(
+//					parallel(
+//							scaleTo(1f, 1f, 3f, Interpolation.pow2Out),
+//							fadeIn(2f, Interpolation.pow2Out)
+//							),							
+//					delay(1f),
+//					fadeOut(2f, Interpolation.pow2Out),
+//					run(new Runnable() {
+//						
+//						@Override
+//						public void run() {
+//							splashComplete = true;
+//						}
+//					})
+//			)
+//		);
 
 		loadingText = new TextActor(GameResources.getDefaultFont());
 		loadingText.setText("Loading... 0%", true);
@@ -74,19 +77,19 @@ public class SplashScreen extends AbstractScreen {
 				music.setLooping(true);
 				music.play();
 				musicStarted = true;
+				Gdx.app.log(screenName, "Starting Music");
 			}
 		}
+			
 		
-		
-		if(!loadingComplete && GameResources.getAssetManager().update()){
+		if(!loadingComplete && GameResources.LoadStep()){
 			// loading is finished
 			loadingComplete = true;
-			loadingText.setText("Loading Complete", true);
-			sendMessageToHandler("ASSETSLOADED");
+			loadingText.setText("Loading Complete. Click to Continue.", true);
 		} 
 		
 		if (!loadingComplete){
-			float percentLoaded = GameResources.getAssetManager().getProgress()*100f;
+			float percentLoaded = GameResources.getPercentLoaded();
 			Gdx.app.log("AssetManager: ", percentLoaded + " %");
 			loadingText.setText("Loading... " + percentLoaded + "%", true);
 		}
@@ -96,15 +99,13 @@ public class SplashScreen extends AbstractScreen {
 		
 		// Allows early bypass of SplashScreen
 		if (Gdx.input.justTouched()){
-			if (readyToShowMenu){
+			if (loadingComplete){
 				sendMessageToHandler("MENU");
 			}
-		} else if (splashComplete && readyToShowMenu){
-			sendMessageToHandler("MENU");
 		}
+//		} else if (splashComplete && loadingComplete){
+//			sendMessageToHandler("MENU");
+//		}
 	}
 	
-	public void onReadyToShowMenu(){
-		readyToShowMenu = true;
-	}
 }

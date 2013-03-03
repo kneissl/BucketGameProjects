@@ -53,12 +53,10 @@ public class BucketGame extends Game implements ScreenHandler {
 
 		if (scr == splashScreen){
 			
-			if (msg.equals("ASSETSLOADED")){
-				loadScreens();
-				((SplashScreen)scr).onReadyToShowMenu();
-				Gdx.app.log(logTag, "All Screens Loaded");
-				
-			} else if (msg.equals("MENU")){
+			if (msg.equals("MENU")){
+				if (menuScreen == null){
+					menuScreen = new MenuScreen(this);
+				}
 				setScreen(menuScreen);
 			} else {
 				unknownMessage(scr, msg);
@@ -69,8 +67,14 @@ public class BucketGame extends Game implements ScreenHandler {
 			if (msg.equals("EXIT")){
 				Gdx.app.exit();
 			} else if (msg.equals("PLAY")){
+				if (gameScreen == null){
+					gameScreen = new GameScreen(this);
+				}
 				setScreen(gameScreen);
 			} else if (msg.equals("OPTIONS")){
+				if (optionsScreen == null){
+					optionsScreen = new OptionsScreen(this);
+				}
 				setScreen(optionsScreen);
 			} else {
 				unknownMessage(scr, msg);		
@@ -95,13 +99,6 @@ public class BucketGame extends Game implements ScreenHandler {
 		} else {
 			Gdx.app.log(logTag, "Unknown Screen: " + scr);
 		}
-	}
-
-	
-	private void loadScreens() {
-		menuScreen = new MenuScreen(this);
-		optionsScreen = new OptionsScreen(this);
-		gameScreen = new GameScreen(this);
 	}
 
 	private void unknownMessage(Screen scr, String msg) {
@@ -137,7 +134,7 @@ public class BucketGame extends Game implements ScreenHandler {
 
 	@Override
 	public void resume() {
-		GameResources.Initialize();
+//		GameResources.Initialize();
 		super.resume();
 		Gdx.app.log(logTag, "resume()");
 	}

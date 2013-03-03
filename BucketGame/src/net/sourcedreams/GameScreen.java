@@ -2,24 +2,34 @@ package net.sourcedreams;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 public class GameScreen extends AbstractScreen {
 
 	Table table;
 	TextButton buttonBack;
-	GridActor grid;
+	
+	Button buttonBandingBox;
+	TextButton buttonWire;
+	
+	Gamefield gamefield;
 	
 	public GameScreen(ScreenHandler pScreenHandler) {
 		super("GameScreen", pScreenHandler, GameResources.getSpriteBatch());
 		
 		table = new Table();
 		table.setFillParent(true);
-		table.debug();
+//		table.debug();
 		stage.addActor(table);
 		
 		buttonBack = new TextButton("Back", GameResources.getSkin());
@@ -31,20 +41,46 @@ public class GameScreen extends AbstractScreen {
 			}
 		});
 		
-		table.top();
-		table.add(buttonBack).expandX().left().padTop(5f).padLeft(5f);
 		
-		int gridSize = Math.min((int)stage.getWidth(), (int)stage.getHeight());
-		gridSize = (int)(((float)gridSize * 0.8f) + .5f);
+		buttonBandingBox = new Button(new Image(GameResources.getGameTextures().bandingBoxIcon),
+										GameResources.getSkin(),
+										"toggle");
 		
-		grid = new GridActor();
-		grid.setSize(gridSize, gridSize);
+		buttonBandingBox.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				gamefield.onBandingBoxToggle(((Button)actor).isChecked());
+			}
+		});
 		
-		grid.setPosition((stage.getWidth()-gridSize)/2f, (stage.getHeight()-gridSize)/2f);
-		grid.addListener(grid.getGridInputListener());
+		buttonWire = new TextButton("Wire", GameResources.getSkin(), "toggle");
+		buttonWire.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				gamefield.onWireButtonToggle(((Button)actor).isChecked());
+				
+			}
+		});
 		
-		stage.addActor(grid);
+		table.row().spaceBottom(15f);
+		table.top().pad(5f);
+		table.add(buttonBack).width(80).right().expandX();
+		table.row();
+		table.add(buttonBandingBox).width(80f).height(60).left();
+		table.row();
+		table.add(buttonWire).width(80f).height(60f).left();
 		
+		
+		int gridWidth = (int) (stage.getWidth() -200f);
+		int gridHeight = (int) (stage.getHeight()-130f);
+		
+		
+		gamefield = new Gamefield(gridWidth, gridHeight, stage);
+		
+		gamefield.setPosition((stage.getWidth()-gridWidth)/2f, (stage.getHeight()-gridHeight)/2f);
+		
+		stage.addActor(gamefield);
+		gamefield.toBack();
 	}
 	
 	@Override
@@ -58,7 +94,7 @@ public class GameScreen extends AbstractScreen {
 		stage.act(delta);
 		stage.draw();
 		
-		Table.drawDebug(stage);
+//		Table.drawDebug(stage);
 		
 	}
 }
