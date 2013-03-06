@@ -1,5 +1,6 @@
 package net.sourcedreams;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 
@@ -9,7 +10,7 @@ public class NTransistor extends ComponentActor {
 	static NTransistor wireDialogComponent;
 	
 	private static void InitializeWireDialog(){
-		wireDialog = new Dialog("Select Pin", GameResources.getSkin(), "dialog"){
+		wireDialog = new Dialog("", GameResources.getSkin(), "dialog"){
 			@Override
 			protected void result(Object object) {
 				if (object == null) {
@@ -20,9 +21,15 @@ public class NTransistor extends ComponentActor {
 				wireDialogComponent = null;
 			}
 		};
+		
+		wireDialog.text("Select Pin");
+		wireDialog.getButtonTable().defaults().width(150f).space(12).padLeft(10).padRight(10).expandX();
 		wireDialog.button("Input", PinType.IN);
+		wireDialog.getButtonTable().row();
 		wireDialog.button("Output", PinType.OUT);
+		wireDialog.getButtonTable().row();
 		wireDialog.button("Gate", PinType.GATE);
+		wireDialog.getButtonTable().row().spaceTop(22).padBottom(10);
 		wireDialog.button("Cancel", null);
 	}
 	
@@ -38,7 +45,7 @@ public class NTransistor extends ComponentActor {
 		Vector2 offsets = new Vector2();
 		pinIn = new ComponentPin("Input", this, offsets.set(62,31));
 		pinOut = new ComponentPin("Output", this, offsets.set(2,31));
-		pinGate = new ComponentPin("Gate", this, offsets.set(31,31));
+		pinGate = new ComponentPin("Gate", this, offsets.set(42,31));
 	}
 
 	@Override
@@ -47,7 +54,7 @@ public class NTransistor extends ComponentActor {
 			InitializeWireDialog();
 		}
 		wireDialogComponent = this;
-		wireDialog.show(gamefield.stage);
+		wireDialog.show(gamefield.gameScreen.stage);
 	}
 	
 	private void onReturnFromWireDialog(PinType type){

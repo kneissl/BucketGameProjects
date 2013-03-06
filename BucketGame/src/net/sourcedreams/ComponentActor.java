@@ -73,10 +73,27 @@ public abstract class ComponentActor extends Actor {
 		final ComponentActor component;
 		final Vector2 pinOffset;
 		
+//		final boolean testHorizontal;
+//		boolean testRight;
+		
 		public ComponentPin(String name, ComponentActor component, Vector2 pinOffset){
 			this.name = name;
 			this.component = component;
 			this.pinOffset = new Vector2(pinOffset);
+			
+//			testRight = false;
+//			
+//			if(pinOffset.x >= .5f*component.getWidth()){
+//				if (pinOffset.x/component.getWidth() > .75f){
+//					testHorizontal = true;
+//					testRight = true;
+//				} else {
+//					testHorizontal = false;
+//				}
+//			} else if (pinOffset.x/component.getWidth() < .25f){
+//				testHorizontal = true;
+//				testRight = false;
+//			} else testHorizontal = false;
 		}
 		
 		@Override

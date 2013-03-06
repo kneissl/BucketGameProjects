@@ -21,14 +21,14 @@ public class Gamefield extends Group {
 	private ShapeRenderer renderer;
 	private final GamefieldGestureListener gamefieldGestureListener;
 	
-	private static final int nCols = 10;
-	private static final int nRows = 6;
+	private final int nCols = 40;
+	private final int nRows;
 	
-	final Stage stage;
+	final GameScreen gameScreen;
 	
 	private final float colWidth;
 	private final float rowHeight;
-
+	
 	private Image bandingBoxImage;
 	private boolean isBandingBoxEnabled;	
 	private boolean isWireModeEnabled;
@@ -40,11 +40,15 @@ public class Gamefield extends Group {
 	private Array<Wire>	wires;
 	
 	
-	public Gamefield(int pWidth, int pHeight, Stage stage){
-		this.stage = stage;
+	public Gamefield(int pWidth, int pHeight, GameScreen gameScreen){
+		this.gameScreen = gameScreen;
 		renderer = new ShapeRenderer();
 		gamefieldGestureListener = new GamefieldGestureListener(this);
 		this.addListener(gamefieldGestureListener);
+		
+		float aspect = (float)pHeight/(float)(pWidth);
+		nRows = Math.round(nCols*aspect);
+		Gdx.app.log("Gamefield", "Aspect: " + aspect + "["+nRows+", "+nCols+"]");
 		
 		this.setSize(pWidth, pHeight);
 		colWidth = pWidth/(float)nCols;
@@ -56,7 +60,7 @@ public class Gamefield extends Group {
 		
 		for (int i=0; i<4; i++){
 			
-			ComponentActor testComponent = new NTransistor(this, colWidth, rowHeight);
+			ComponentActor testComponent = new NTransistor(this, colWidth*4, rowHeight*4);
 			testComponent.setPosition((float)Math.random()*pWidth*.8f, (float)Math.random()*pHeight*.8f);
 //			testComponent.setColor(Color.WHITE);
 //			testComponent.setWidth(colWidth);
@@ -70,7 +74,6 @@ public class Gamefield extends Group {
 		bandingBoxImage = new Image(new NinePatchDrawable(GameResources.getGameTextures().selection));
 		bandingBoxImage.setVisible(false);
 		this.addActor(bandingBoxImage);
-		
 	}
 	
 	@Override
@@ -93,11 +96,9 @@ public class Gamefield extends Group {
 		}
 		
 		renderer.setColor(Color.WHITE);
+		
 		for (Wire w : wires){
-			renderer.line(	w.startPin.getX(), 
-							w.startPin.getY(), 
-							w.stopPin.getX(), 
-							w.stopPin.getY());
+			w.draw(renderer);
 		}
 		
 		renderer.end();
@@ -122,10 +123,20 @@ public class Gamefield extends Group {
 	
 	public void onBandingBoxToggle(boolean checked) {
 		isBandingBoxEnabled = checked;
+		if (isBandingBoxEnabled){
+			gameScreen.setStatusMessage("Selection Mode: Drag to select Components.");
+		} else {
+			gameScreen.setStatusMessage("");
+		}
 	}
 	
 	public void onWireButtonToggle(boolean checked) {
 		isWireModeEnabled = checked;
+		if (isWireModeEnabled){
+			gameScreen.setStatusMessage("Wire Mode: Select the first Component.");
+		} else {
+			gameScreen.setStatusMessage("");
+		}
 	}
 
 	public void onPinConnection(ComponentPin pin){
@@ -133,10 +144,12 @@ public class Gamefield extends Group {
 		if (wireInProgress == null){
 			wireInProgress = new Wire();
 			wireInProgress.startPin = pin;
+			gameScreen.setStatusMessage("Wire Mode: Select the second Component.");
 		} else {
 			wireInProgress.stopPin = pin;
 			wires.add(wireInProgress);
-			Gdx.app.log("WIRE", "Added: " + wireInProgress.startPin + ", " + wireInProgress.stopPin);
+			gameScreen.setStatusMessage("Wire Mode: Select the first Component.");
+//			Gdx.app.log("WIRE", "Added: " + wireInProgress.startPin + ", " + wireInProgress.stopPin);
 			wireInProgress = null;
 		}
 	}

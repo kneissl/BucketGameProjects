@@ -4,7 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -14,6 +16,9 @@ public class GameScreen extends AbstractScreen {
 	Table table;
 	TextButton buttonBack;
 	
+	Label statusMessage;
+	
+	ButtonGroup buttonGroup;
 	Button buttonBandingBox;
 	TextButton buttonWire;
 	
@@ -36,6 +41,7 @@ public class GameScreen extends AbstractScreen {
 			}
 		});
 		
+		statusMessage = new Label("", GameResources.getSkin());
 		
 		buttonBandingBox = new Button(new Image(GameResources.getGameTextures().bandingBoxIcon),
 										GameResources.getSkin(),
@@ -57,9 +63,14 @@ public class GameScreen extends AbstractScreen {
 			}
 		});
 		
+		buttonGroup = new ButtonGroup(buttonBandingBox, buttonWire);
+		buttonGroup.setMinCheckCount(0);
+		
 		table.row().spaceBottom(15f);
 		table.top().pad(5f);
-		table.add(buttonBack).width(80).right().expandX();
+		table.add().width(80).left();
+		table.add(statusMessage).expandX();
+		table.add(buttonBack).width(80).right();
 		table.row();
 		table.add(buttonBandingBox).width(80f).height(60).left();
 		table.row();
@@ -70,7 +81,7 @@ public class GameScreen extends AbstractScreen {
 		int gridHeight = (int) (stage.getHeight()-130f);
 		
 		
-		gamefield = new Gamefield(gridWidth, gridHeight, stage);
+		gamefield = new Gamefield(gridWidth, gridHeight, this);
 		
 		gamefield.setPosition((stage.getWidth()-gridWidth)/2f, (stage.getHeight()-gridHeight)/2f);
 		
@@ -91,5 +102,9 @@ public class GameScreen extends AbstractScreen {
 		
 //		Table.drawDebug(stage);
 		
+	}
+	
+	public void setStatusMessage(String msg){
+		statusMessage.setText(msg);
 	}
 }
